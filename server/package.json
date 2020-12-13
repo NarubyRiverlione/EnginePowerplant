@@ -5,7 +5,8 @@
   "main": "",
   "scripts": {
     "lint": "eslint . --fix",
-    "test": "jest --coverage=true"
+    "testAll": "jest --coverage=true",
+    "test": "jest"
   },
   "author": "Naruby",
   "license": "ISC",

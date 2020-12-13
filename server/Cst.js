@@ -73,6 +73,13 @@ const CstChanges = {
   }
 }
 
+const CstFuelSys = {
+  DS: {
+    TankVolume: 1000,
+    ShoreVolume: 1000000
+  }
+}
+
 module.exports = {
   CstCmd,
   CstService,
@@ -81,5 +88,6 @@ module.exports = {
   CstBoundaries,
   CstChanges,
   CstActions,
-  CstTxt
+  CstTxt,
+  CstFuelSys
 }
