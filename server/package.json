@@ -1,0 +1,78 @@
+{
+  "name": "shipengine_server",
+  "version": "1.0.0",
+  "description": "server for ship engine simulator",
+  "main": "",
+  "scripts": {
+    "lint": "eslint . --fix",
+    "test": "jest --coverage=true"
+  },
+  "author": "Naruby",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3",
+    "jest": "^26.6.3"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.2",
+    "debug": "^4.1.1"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "./*.js",
+      "./protoc/Engine.proto"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-base/legacy"
+    ],
+    "plugins": [
+      "jest"
+    ],
+    "env": {
+      "node": true,
+      "es6": true,
+      "jest/globals": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "module"
+    },
+    "rules": {
+      "class-methods-use-this": "warn",
+      "max-len": [
+        "warn",
+        {
+          "code": 120,
+          "comments": 150
+        }
+      ],
+      "indent": [
+        "warn",
+        2
+      ],
+      "linebreak-style": [
+        0
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "never"
+      ],
+      "no-mixed-spaces-and-tabs": [
+        "warn",
+        "smart-tabs"
+      ],
+      "no-console": [
+        "off"
+      ]
+    }
+  }
+}

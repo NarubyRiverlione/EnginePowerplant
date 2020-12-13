@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+service Simulator {
+  rpc Status (EmptyRequest) returns (StatusResponse);
+  rpc Start(EmptyRequest) returns(StatusResponse);
+  rpc Stop(EmptyRequest)returns(StatusResponse);
+}
+service Power{
+  rpc Status(EmptyRequest)returns(PowerStatusResponse);
+  rpc ConnectShore(EmptyRequest)returns(PowerStatusResponse);
+  rpc DisconnectShore(EmptyRequest)returns(PowerStatusResponse);
+  rpc StartDSgen1(EmptyRequest)returns(RunningResponge);
+  rpc StopDSgen1(EmptyRequest)returns(RunningResponge);
+
+}
+
+
+message EmptyRequest {}
+
+message StatusResponse{
+  bool status=1;
+  string statusMessage=2;
+}
+
+message PowerStatusResponse{
+  int32 MainBus=1;
+  bool ShorePower=2;
+  bool DSgen1=3;
+}
+
+message RunningResponge{
+  bool Running=1;
+  string Message=2;
+}
