@@ -1,4 +1,4 @@
-const FuelSystem = require('../Fuel')
+const FuelSystem = require('../FuelSystem')
 const { CstFuelSys } = require('../Cst')
 
 let fuelSys
@@ -16,9 +16,15 @@ describe('Fuel system init', () => {
   })
 })
 
-describe('Filling from schore', () => {
-  test('Closing shore fill valve, add to diesel tank', () => {
+describe('Filling from shore', () => {
+  test('Closing shore fill valve, adding to diesel tank until full', done => {
+    const cbFull = () => {
+      console.debug('tank is full')
+      expect(fuelSys.DieselTank.Content).toBe(CstFuelSys.DS.TankVolume)
+      done()
+    }
+    fuelSys.DieselTank.CbFull = cbFull
+
     fuelSys.DieselShoreFillValve.Close()
-    expect(fuelSys.DieselTank.Content).toBe(10)
-  })
+  }, 150000) // jest timeout = 15 sec
 })

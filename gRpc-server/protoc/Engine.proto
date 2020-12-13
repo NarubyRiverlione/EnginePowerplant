@@ -9,14 +9,19 @@ service Power{
   rpc Status(EmptyRequest)returns(PowerStatusResponse);
   rpc ConnectShore(EmptyRequest)returns(PowerStatusResponse);
   rpc DisconnectShore(EmptyRequest)returns(PowerStatusResponse);
-  rpc StartDSgen1(EmptyRequest)returns(RunningResponge);
-  rpc StopDSgen1(EmptyRequest)returns(RunningResponge);
-
+  rpc StartDSgen1(EmptyRequest)returns(RunningResponse);
+  rpc StopDSgen1(EmptyRequest)returns(RunningResponse);
+}
+service FuelSys{
+  rpc DStankInfo(EmptyRequest)returns(ContentResponse);
+  rpc DSshoreFillValve(ValveRequest) returns(StatusResponse);
 }
 
-
 message EmptyRequest {}
-
+message ValveRequest {
+  bool CloseNow=1;
+  bool OpenNow=2;
+}
 message StatusResponse{
   bool status=1;
   string statusMessage=2;
@@ -28,7 +33,12 @@ message PowerStatusResponse{
   bool DSgen1=3;
 }
 
-message RunningResponge{
+message RunningResponse{
   bool Running=1;
   string Message=2;
+}
+
+message ContentResponse{
+  int32 Content=1;
+  int32 MaxContent=2;
 }

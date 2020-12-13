@@ -1,36 +1,56 @@
+const { CstChanges } = require('../Cst')
 module.exports = class Tank {
   constructor(Max, StartContent = 0) {
     this.Content = StartContent
     this.MaxContent = Max
-    this.Adding = null
-    this.Removing = null
+    this.Adding = null // ref setInterval
+    this.AddEachStep = 0
+    this.Removing = null // ref setIntervel
+    this.RemoveEachStep = 0
+    this.CbFull = null
   }
 
-  Add(adding) {
-    if (adding + this.Content < this.MaxContent) {
-      this.Content += adding
+  Add() {
+    if (this.AddEachStep + this.Content < this.MaxContent) {
+      this.Content += this.AddEachStep
     } else {
       // prevent overfill
       this.Content = this.MaxContent
-      if (this.Adding) this.StopAdding()
+      if (this.CbFull) this.CbFull()
     }
   }
 
-  Remove(removing) {
-    if (this.Content - removing > 0) {
-      this.Content -= removing
+  Remove() {
+    if (this.Content - this.RemoveEachStep > 0) {
+      this.Content -= this.RemoveEachStep
     } else { this.Content = 0 }
   }
 
-  StartAdding(addEachStep, cbAdded) {
+  StartAdding(cbAdded) {
     this.Adding = setInterval(() => {
-      this.Add(addEachStep)
+      this.Add()
       if (cbAdded) cbAdded()
-    }, 500)
+    }, CstChanges.TankInterval)
   }
 
   StopAdding() {
-    clearInterval(this.Adding)
-    this.Adding = null
+    if (this.Adding) {
+      clearInterval(this.Adding)
+      this.Adding = null
+    }
+  }
+
+  StartRemoving(cbRemoved) {
+    this.Removing = setInterval(() => {
+      this.Remove()
+      if (cbRemoved) cbRemoved()
+    }, CstChanges.TankInterval)
+  }
+
+  StopRemoving() {
+    if (this.Removing) {
+      clearInterval(this.Removing)
+      this.Removing = null
+    }
   }
 }

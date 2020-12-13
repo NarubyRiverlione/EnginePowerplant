@@ -59,24 +59,14 @@ const CstBoundaries = {
 }
 
 const CstChanges = {
-  Interval: 1000,
-  Balast: {
-    Blowing: -5, // = 20 step for complete emptying balasttank
-    NeededAir: 0.8, // = 80% air needed for full blow
-    Filling: 10
-  },
-  Air: {
-    Charging: 5
-  },
-  Depth: {
-    BuoyancyFactor: 0.1 // 50 balast = 5 depth change per tick
-  }
+  TankInterval: 1000
 }
 
 const CstFuelSys = {
   DS: {
-    TankVolume: 1000,
-    ShoreVolume: 1000000
+    TankVolume: 2500,
+    ShoreVolume: 1000000,
+    TankAddStep: 500
   }
 }
 

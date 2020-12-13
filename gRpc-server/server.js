@@ -3,7 +3,7 @@ const path = require('path')
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader')
 
-const { CstServerIP, CstServerPort } = require('../server/Cst')
+const { CstServerIP, CstServerPort, CstFuelSys } = require('../server/Cst')
 
 const Simulator = require('../server/Simulator')
 
@@ -39,6 +39,25 @@ const StartDSgen1 = (call, cb) => cb(null, simulator.Power.DSgen1.Start())
 const StopDSgen1 = (call, cb) => cb(null, simulator.Power.DSgen1.Stop())
 // #endregion
 
+// #region Fuel System
+const DStankInfo = (call, cb) => cb(null, {
+  Content: simulator.FuelSys.DieselTank,
+  MaxContent: CstFuelSys.DS.TankVolume
+})
+const DSshoreFillValve = (call, cb) => {
+  const { OpenNow, CloseNow } = call
+  if (OpenNow) {
+    simulator.FuelSys.DieselShoreFillValve.Open()
+    cb({ status: simulator.FuelSys.DSshoreFillValve.IsOpen, statusMessage: 'isOpen' })
+  }
+  if (CloseNow) {
+    simulator.FuelSys.DieselShoreFillValve.Close()
+    cb({ status: simulator.FuelSys.DSshoreFillValve.IsOpen, statusMessage: 'isOpen' })
+    cle
+  }
+}
+
+// #endregion
 /* Starts an RPC server that receives requests
  first argument = server IP
  second argument = server port
@@ -57,6 +76,7 @@ const server = () => {
     StartDSgen1,
     StopDSgen1
   })
+  gRpcServer.addService(proto.FuelSys.service, { DStankInfo, DSshoreFillValve })
 
   gRpcServer.bind(`${serverIP}:${serverPort}`, grpc.ServerCredentials.createInsecure())
   gRpcServer.start()

@@ -1,11 +1,13 @@
 const { CstTxt } = require('./Cst')
 const Power = require('./Power')
+const FuelSystem = require('./FuelSystem')
 
 const { SimulationTxt } = CstTxt
 module.exports = class Simulator {
   constructor() {
     this.IsRunning = false
     this.Power = new Power()
+    this.FuelSys = new FuelSystem()
   }
 
   Update() {
