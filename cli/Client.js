@@ -24,6 +24,7 @@ module.exports = class Client {
     debug(`connecting to ${serverIP} on port ${serverPort}`)
     this.Simulator = new proto.Simulator(`${serverIP}:${serverPort}`, grpc.credentials.createInsecure())
     this.Power = new proto.Power(`${serverIP}:${serverPort}`, grpc.credentials.createInsecure())
+    this.FuelSys = new proto.FuelSys(`${serverIP}:${serverPort}`, grpc.credentials.createInsecure())
   }
 
   // #region  Simulator
@@ -99,6 +100,26 @@ module.exports = class Client {
   StopDSgen1() {
     return new Promise((resolve, reject) => {
       this.Power.StopDSgen1({}, (err, respone) => {
+        if (err) { return reject(err) }
+        return resolve(respone)
+      })
+    })
+  }
+
+  // #endregion
+  // #region Fuel System
+  DStankInfo() {
+    return new Promise((resolve, reject) => {
+      this.FuelSys.DStankInfo({}, (err, respone) => {
+        if (err) { return reject(err) }
+        return resolve(respone)
+      })
+    })
+  }
+
+  DSshoreFillValve(Action) {
+    return new Promise((resolve, reject) => {
+      this.FuelSys.DSshoreFillValve({ Action }, (err, respone) => {
         if (err) { return reject(err) }
         return resolve(respone)
       })

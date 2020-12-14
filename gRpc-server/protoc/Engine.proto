@@ -15,12 +15,12 @@ service Power{
 service FuelSys{
   rpc DStankInfo(EmptyRequest)returns(ContentResponse);
   rpc DSshoreFillValve(ValveRequest) returns(StatusResponse);
+
 }
 
 message EmptyRequest {}
 message ValveRequest {
-  bool CloseNow=1;
-  bool OpenNow=2;
+  string Action=1;
 }
 message StatusResponse{
   bool status=1;

@@ -5,27 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Tests",
-      "request": "launch",
-      "runtimeArgs": [
-        "run-script",
-        "test",
-        "Tank.test.js"
-      ],
-      "runtimeExecutable": "npm",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "pwa-node"
-    },
-    {
       "type": "node",
       "request": "launch",
-      "name": "Launch server",
+      "name": "cli",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/server.js"
+      "args": [
+        "fuel",
+        "dieselintakevalve",
+        "close"
+      ],
+      "program": "${workspaceFolder}/cli.js"
     }
   ]
 }

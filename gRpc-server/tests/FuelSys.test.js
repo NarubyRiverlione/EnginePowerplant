@@ -3,7 +3,7 @@ const path = require('path')
 const protoLoader = require('@grpc/proto-loader')
 
 const {
-  CstServerIP, CstServerPort, CstTxt, CstFuelSys
+  CstServerIP, CstServerPort, CstTxt, CstFuelSys, CstCmd
 } = require('../../server/Cst')
 const PROTO_PATH = path.join(__dirname, '../protoc/Engine.proto')
 
@@ -33,20 +33,29 @@ describe('Fuel system', () => {
       expect(status).toEqual({ Content: 0, MaxContent: CstFuelSys.DS.TankVolume })
     })
   })
-  test('Fill diesel tank from shore', close => {
-    grpcFuelSys.DSshoreFillValve({ OpenNow: true }, (err, response) => {
+  test('Init: diesel shore intake valve is open', () => {
+    grpcFuelSys.DSshoreFillValve({ Action: CstCmd.Open }, (err, response) => {
       expect(err).toBeNull()
       const { status } = response
       expect(status).toBeTruthy()
+    })
+  })
+  test('Fill diesel tank from shore', close => {
+    grpcFuelSys = new proto.FuelSys(`${CstServerIP}:${CstServerPort}`, grpc.credentials.createInsecure())
+    grpcFuelSys.DSshoreFillValve({ Action: CstCmd.Close }, (err, response) => {
+      expect(err).toBeNull()
+      const { status } = response
+      expect(status).toBeFalsy()
 
       setTimeout(() => {
         grpcFuelSys.DStankInfo({}, (err2, status2) => {
           expect(err2).toBeNull()
           const { Content } = status2
+          console.debug(status2)
           expect(Content).not.toBe(0)
+          close()
         })
-        close()
-      }, 2000)
+      }, 3000)
     })
   }, 10000)
 })

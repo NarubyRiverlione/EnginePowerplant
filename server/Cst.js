@@ -14,7 +14,9 @@ const CstActions = {
   Status: 'status',
   Reset: 'reset',
   Shore: 'shore',
-  DSgen1: 'dsgen1'
+  DSgen1: 'dsgen1',
+  DieselTank: 'dieseltank',
+  DieselIntakeValve: 'dieselintakevalve'
 }
 
 const CstCmd = {
@@ -22,7 +24,9 @@ const CstCmd = {
   Stop: 'stop',
   Info: 'info',
   Connect: 'connect',
-  Disconnect: 'disconnect'
+  Disconnect: 'disconnect',
+  Open: 'open',
+  Close: 'close'
 }
 
 const CstTxt = {
@@ -33,6 +37,10 @@ const CstTxt = {
       ${CstService.Simulation}    ${CstActions.Status}    ${CstCmd.Start} 
       ${CstService.Simulation}    ${CstActions.Status}    ${CstCmd.Stop} 
     
+      ${CstService.Fuel}    ${CstActions.DieselTank}    ${CstCmd.Info}
+      ${CstService.Fuel}    ${CstActions.DieselIntakeValve}    ${CstCmd.Info}
+      ${CstService.Fuel}    ${CstActions.DieselIntakeValve}    ${CstCmd.Open}
+      ${CstService.Fuel}    ${CstActions.DieselIntakeValve}    ${CstCmd.Close}
       General action for all stations: ${CstActions.Info}  
       `,
   UnknownTxt: {
@@ -51,6 +59,10 @@ const CstTxt = {
     Disconnected: 'disconnected',
     Running: 'running',
     NotRunning: 'not running'
+  },
+  FuelSysTxt: {
+    DSintakeValve: 'Diesel intake shore valve',
+    DStank: 'Diesel storage tank'
   }
 }
 
@@ -66,7 +78,7 @@ const CstFuelSys = {
   DS: {
     TankVolume: 2500,
     ShoreVolume: 1000000,
-    TankAddStep: 500
+    TankAddStep: 50
   }
 }
 

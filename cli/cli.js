@@ -1,5 +1,6 @@
 const Simulator = require('./cli-simulator')
 const Power = require('./cli-power')
+const FuelSys = require('./cli-fuel')
 
 const { CstService, CstTxt } = require('../server/Cst')
 const { UnknownTxt, HelpTxt } = CstTxt
@@ -12,15 +13,18 @@ const rpcCmd = Args[4] ? Args[4].toLowerCase() : null
 const rpcValue = Args[5] || null
 
 switch (rpcService) {
-case CstService.Simulation:
-  Simulator(rpcAction, rpcCmd)
-  break
-case CstService.Power:
-  Power(rpcAction, rpcCmd)
-  break
-case CstService.Help:
-  console.log(HelpTxt)
-  break
-default:
-  console.error(`${UnknownTxt.Service}: ${rpcService}  ${UnknownTxt.UseHelp}`)
+  case CstService.Simulation:
+    Simulator(rpcAction, rpcCmd)
+    break
+  case CstService.Power:
+    Power(rpcAction, rpcCmd)
+    break
+  case CstService.Fuel:
+    FuelSys(rpcAction, rpcCmd, rpcValue)
+    break
+  case CstService.Help:
+    console.log(HelpTxt)
+    break
+  default:
+    console.error(`${UnknownTxt.Service}: ${rpcService}  ${UnknownTxt.UseHelp}`)
 }

@@ -3,7 +3,9 @@ const path = require('path')
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader')
 
-const { CstServerIP, CstServerPort, CstFuelSys } = require('../server/Cst')
+const {
+  CstServerIP, CstServerPort, CstFuelSys, CstCmd
+} = require('../server/Cst')
 
 const Simulator = require('../server/Simulator')
 
@@ -41,20 +43,20 @@ const StopDSgen1 = (call, cb) => cb(null, simulator.Power.DSgen1.Stop())
 
 // #region Fuel System
 const DStankInfo = (call, cb) => cb(null, {
-  Content: simulator.FuelSys.DieselTank,
+  Content: simulator.FuelSys.DieselTank.Content,
   MaxContent: CstFuelSys.DS.TankVolume
 })
+
 const DSshoreFillValve = (call, cb) => {
-  const { OpenNow, CloseNow } = call
-  if (OpenNow) {
+  const { Action } = call.request
+  if (Action.toLowerCase() === CstCmd.Open) {
     simulator.FuelSys.DieselShoreFillValve.Open()
-    cb({ status: simulator.FuelSys.DSshoreFillValve.IsOpen, statusMessage: 'isOpen' })
   }
-  if (CloseNow) {
+  if (Action.toLowerCase() === CstCmd.Close) {
     simulator.FuelSys.DieselShoreFillValve.Close()
-    cb({ status: simulator.FuelSys.DSshoreFillValve.IsOpen, statusMessage: 'isOpen' })
-    cle
   }
+  const statusMsg = simulator.FuelSys.DSintakeValveStatus()
+  cb(null, statusMsg)
 }
 
 // #endregion
