@@ -10,7 +10,7 @@ beforeEach(() => {
 describe('Fuel system init', () => {
   test('Empty diesel tank', () => {
     expect(fuelSys.DieselTank.Content).toBe(0)
-    expect(fuelSys.DieselTank.MaxContent).toBe(CstFuelSys.DS.TankVolume)
+    expect(fuelSys.DieselTank.MaxContent).toBe(CstFuelSys.DsStorage.TankVolume)
   })
   test('Diesel shore fill valve is open', () => {
     expect(fuelSys.DieselShoreFillValve.IsOpen).toBeTruthy()
@@ -19,10 +19,14 @@ describe('Fuel system init', () => {
     expect(status).toBeTruthy()
     expect(statusMessage).toEqual(`${FuelSysTxt.DSintakeValve} is open`)
   })
+  test('Diesel fuel line valve is open', () => {
+    expect(fuelSys.DieselLineValve.IsOpen).toBeTruthy()
+    expect(fuelSys.DieselLineValve.Output()).toBe(0) // empty dieseltank = empty fuel line valve
+  })
 })
 
-describe('Filling from shore', () => {
-  test.only('Closing shore fill valve, adding to diesel tank then open valve', done => {
+describe.skip('Filling from shore', () => {
+  test('Closing shore fill valve, adding to diesel tank then open valve', done => {
     fuelSys.DieselShoreFillValve.Close()
     const valveStatus = fuelSys.DSintakeValveStatus()
     const { status, statusMessage } = valveStatus
@@ -54,4 +58,18 @@ describe('Filling from shore', () => {
     expect(status).toBeFalsy()
     expect(statusMessage).toEqual(`${FuelSysTxt.DSintakeValve} is closed`)
   }, 150000) // jest timeout = 15 sec
+})
+
+describe('Connect dieseltank to fuel line', () => {
+  test('Close diesel fuel line valve', () => {
+    fuelSys.DieselTank.Content = 2000
+    fuelSys.DieselLineValve.Close()
+    expect(fuelSys.DieselLineValve.Output()).toBe(2000)
+  })
+  test('Open a previous closed fuel line valve', () => {
+    fuelSys.DieselTank.Content = 2000
+    fuelSys.DieselLineValve.Close()
+    fuelSys.DieselLineValve.Open()
+    expect(fuelSys.DieselLineValve.Output()).toBe(0)
+  })
 })

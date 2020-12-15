@@ -8,10 +8,12 @@ const showTankContent = (tank) => { console.debug(tank.Content) }
 
 module.exports = class FuelSystem {
   constructor() {
-    this.DieselTank = new Tank(CstFuelSys.DS.TankVolume)
-    this.DieselTank.AddEachStep = CstFuelSys.DS.TankAddStep
+    this.DieselTank = new Tank(CstFuelSys.DsStorage.TankVolume)
+    this.DieselTank.AddEachStep = CstFuelSys.DsStorage.TankAddStep
 
-    this.DieselShoreFillValve = new Valve(CstFuelSys.DS.ShoreVolume)
+    this.DsServiceTank = new Tank(CstFuelSys.DsService.TankVolume)
+
+    this.DieselShoreFillValve = new Valve({ Content: CstFuelSys.ShoreVolume })
     // start adding diesel when shore intake valve is closed
     this.DieselShoreFillValve.cbNowClosed = () => {
       this.DieselTank.StartAdding(() => showTankContent(this.DieselTank))
@@ -19,6 +21,14 @@ module.exports = class FuelSystem {
     // stop adding diesel when shore intake valve is opende
     this.DieselShoreFillValve.cbNowOpen = () => {
       this.DieselTank.StopAdding(() => showTankContent(this.DieselTank))
+    }
+
+    this.DieselLineValve = new Valve(this.DieselTank)
+    this.DieselLineValve.cbNowClosed = () => {
+      this.DieselTank.StartRemoving(() => showTankContent(this.DieselTank))
+    }
+    this.DieselLineValve.cbNowOpen = () => {
+      this.DieselTank.StopRemoving(() => showTankContent(this.DieselTank))
     }
   }
 

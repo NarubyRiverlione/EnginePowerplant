@@ -1,9 +1,11 @@
 module.exports = class Valve {
-  constructor(input = 0, cbOpening, cbClosing) {
-    this.Input = input
+  constructor(source, cbOpening, cbClosing) {
+    // this.Input = input
     this.IsOpen = true
     this.cbNowOpen = cbOpening
     this.cbNowClosed = cbClosing
+    this.Source = source
+    this.Target = null
   }
 
   Open() {
@@ -17,6 +19,7 @@ module.exports = class Valve {
   }
 
   Output() {
-    return this.IsOpen ? 0 : this.Input
+    const input = this.Source ? this.Source.Content : 0
+    return this.IsOpen ? 0 : input
   }
 }

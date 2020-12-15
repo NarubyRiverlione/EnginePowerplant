@@ -75,10 +75,15 @@ const CstChanges = {
 }
 
 const CstFuelSys = {
-  DS: {
+  ShoreVolume: 1000000,
+  DsStorage: {
     TankVolume: 2500,
-    ShoreVolume: 1000000,
     TankAddStep: 50
+  },
+  DsService: {
+    TankVolume: 1000,
+    ShoreVolume: 1000000,
+    TankAddStep: 10
   }
 }
 
