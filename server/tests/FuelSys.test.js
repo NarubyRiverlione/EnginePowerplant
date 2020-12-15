@@ -10,7 +10,7 @@ beforeEach(() => {
 describe('Fuel system init', () => {
   test('Empty diesel tank', () => {
     expect(fuelSys.DieselTank.Content).toBe(0)
-    expect(fuelSys.DieselTank.MaxContent).toBe(CstFuelSys.DsStorage.TankVolume)
+    expect(fuelSys.DieselTank.MaxContent).toBe(CstFuelSys.DsStorageTank.TankVolume)
   })
   test('Diesel shore fill valve is open', () => {
     expect(fuelSys.DieselShoreFillValve.IsOpen).toBeTruthy()
@@ -48,7 +48,7 @@ describe('Filling from shore', () => {
   test('Closing shore fill valve, adding to diesel tank until full', done => {
     const cbFull = () => {
       // console.debug('tank is full')
-      expect(fuelSys.DieselTank.Content).toBe(CstFuelSys.DsStorage.TankVolume)
+      expect(fuelSys.DieselTank.Content).toBe(CstFuelSys.DsStorageTank.TankVolume)
       done()
     }
     fuelSys.DieselTank.CbFull = cbFull

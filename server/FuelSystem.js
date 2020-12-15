@@ -8,11 +8,11 @@ const showTankContent = (tank) => { console.debug(tank.Content) }
 
 module.exports = class FuelSystem {
   constructor() {
-    this.DieselTank = new Tank(CstFuelSys.DsStorage.TankVolume)
+    this.DieselTank = new Tank(CstFuelSys.DsStorageTank.TankVolume)
     this.DieselTank.Name = FuelSysTxt.DsStorage
-    this.DieselTank.AddEachStep = CstFuelSys.DsStorage.TankAddStep
+    this.DieselTank.AddEachStep = CstFuelSys.DsStorageTank.TankAddStep
 
-    this.DsServiceTank = new Tank(CstFuelSys.DsService.TankVolume)
+    this.DsServiceTank = new Tank(CstFuelSys.DsServiceTank.TankVolume)
     this.DsServiceTank.Name = FuelSysTxt.DsServiceTank
 
     this.DieselShoreFillValve = new Valve({ Content: CstFuelSys.ShoreVolume })

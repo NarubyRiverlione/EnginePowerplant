@@ -44,7 +44,7 @@ const StopDSgen1 = (call, cb) => cb(null, simulator.Power.DSgen1.Stop())
 // #region Fuel System
 const DStankInfo = (call, cb) => cb(null, {
   Content: simulator.FuelSys.DieselTank.Content,
-  MaxContent: CstFuelSys.DS.TankVolume
+  MaxContent: CstFuelSys.DsStorageTank.TankVolume
 })
 
 const DSshoreFillValve = (call, cb) => {
@@ -61,10 +61,10 @@ const DSshoreFillValve = (call, cb) => {
 const DSfuelLineValve = (call, cb) => {
   const { Action } = call.request
   if (Action.toLowerCase() === CstCmd.Open) {
-    simulator.FuelSys.DSfuelLineValve.Open()
+    simulator.FuelSys.DieselLineValve.Open()
   }
   if (Action.toLowerCase() === CstCmd.Close) {
-    simulator.FuelSys.DSfuelLineValve.Close()
+    simulator.FuelSys.DieselLineValve.Close()
   }
   const statusMsg = simulator.FuelSys.DieselLineValve.Status()
   cb(null, statusMsg)
