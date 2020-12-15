@@ -61,8 +61,10 @@ const CstTxt = {
     NotRunning: 'not running'
   },
   FuelSysTxt: {
-    DSintakeValve: 'Diesel intake shore valve',
-    DStank: 'Diesel storage tank'
+    DsStorageTank: 'Diesel storage tank',
+    DsServiceTank: 'Diesel service tank',
+    DsShoreFillValve: 'Diesel shore fill valve',
+    DsFuelLineValve: 'Diesel fuel line valve'
   }
 }
 
@@ -85,6 +87,7 @@ const CstFuelSys = {
     ShoreVolume: 1000000,
     TankAddStep: 10
   }
+
 }
 
 module.exports = {

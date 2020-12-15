@@ -15,14 +15,23 @@ describe('Valve init', () => {
     expect(valveWithInput.IsOpen).toBeTruthy()
     expect(valveWithInput.Output()).toBe(0)
   })
+  test('Valve status', () => {
+    const testValve = new Valve()
+    const name = 'Test valve'
+    testValve.Name = name
+    expect(testValve.Status()).toEqual({ status: true, statusMessage: `${name} is open` })
+  })
 })
 
 describe('Valve close', () => {
   test('Closed valve has output', () => {
     const sourceContent = 12345.6
     const testValve = new Valve({ Content: sourceContent })
+    const name = 'Test valve'
+    testValve.Name = name
     testValve.Close()
     expect(testValve.Output()).toBe(sourceContent)
+    expect(testValve.Status()).toEqual({ status: false, statusMessage: `${name} is closed` })
   })
   test('Closed valve has output and delivers feedback', () => {
     const input = 458
@@ -50,7 +59,7 @@ describe('Valve open after closed', () => {
     testValve.Open()
     expect(valve.Output()).toBe(0)
   })
-  test('Open en previous closed valve has no output and provides feedbacl', () => {
+  test('Open en previous closed valve has no output and provides feedback', () => {
     const input = 7892
     let cbFlag = false
     const answer = 'test feedback opening valve'

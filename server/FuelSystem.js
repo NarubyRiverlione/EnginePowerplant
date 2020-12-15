@@ -9,11 +9,14 @@ const showTankContent = (tank) => { console.debug(tank.Content) }
 module.exports = class FuelSystem {
   constructor() {
     this.DieselTank = new Tank(CstFuelSys.DsStorage.TankVolume)
+    this.DieselTank.Name = FuelSysTxt.DsStorage
     this.DieselTank.AddEachStep = CstFuelSys.DsStorage.TankAddStep
 
     this.DsServiceTank = new Tank(CstFuelSys.DsService.TankVolume)
+    this.DsServiceTank.Name = FuelSysTxt.DsServiceTank
 
     this.DieselShoreFillValve = new Valve({ Content: CstFuelSys.ShoreVolume })
+    this.DieselShoreFillValve.Name = FuelSysTxt.DsShoreFillValve
     // start adding diesel when shore intake valve is closed
     this.DieselShoreFillValve.cbNowClosed = () => {
       this.DieselTank.StartAdding(() => showTankContent(this.DieselTank))
@@ -24,20 +27,12 @@ module.exports = class FuelSystem {
     }
 
     this.DieselLineValve = new Valve(this.DieselTank)
+    this.DieselLineValve.Name = FuelSysTxt.DsFuelLineValve
     this.DieselLineValve.cbNowClosed = () => {
       this.DieselTank.StartRemoving(() => showTankContent(this.DieselTank))
     }
     this.DieselLineValve.cbNowOpen = () => {
       this.DieselTank.StopRemoving(() => showTankContent(this.DieselTank))
-    }
-  }
-
-  DSintakeValveStatus() {
-    return {
-      status: this.DieselShoreFillValve.IsOpen,
-      statusMessage: this.DieselShoreFillValve.IsOpen
-        ? `${FuelSysTxt.DSintakeValve} is open`
-        : `${FuelSysTxt.DSintakeValve} is closed`
     }
   }
 }

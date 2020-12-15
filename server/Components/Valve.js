@@ -6,6 +6,7 @@ module.exports = class Valve {
     this.cbNowClosed = cbClosing
     this.Source = source
     this.Target = null
+    this.Name = ''
   }
 
   Open() {
@@ -21,5 +22,14 @@ module.exports = class Valve {
   Output() {
     const input = this.Source ? this.Source.Content : 0
     return this.IsOpen ? 0 : input
+  }
+
+  Status() {
+    return {
+      status: this.IsOpen,
+      statusMessage: this.IsOpen
+        ? `${this.Name} is open`
+        : `${this.Name} is closed`
+    }
   }
 }

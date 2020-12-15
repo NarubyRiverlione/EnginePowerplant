@@ -8,6 +8,7 @@ module.exports = class Tank {
     this.Removing = null // ref setIntervel
     this.RemoveEachStep = 0
     this.CbFull = null
+    this.Name = ''
   }
 
   Add() {
