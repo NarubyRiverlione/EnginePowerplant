@@ -58,15 +58,15 @@ const DSshoreFillValve = (call, cb) => {
   const statusMsg = simulator.FuelSys.DieselShoreFillValve.Status()
   cb(null, statusMsg)
 }
-const DSfuelLineValve = (call, cb) => {
+const DsStorageOutletValve = (call, cb) => {
   const { Action } = call.request
   if (Action.toLowerCase() === CstCmd.Open) {
-    simulator.FuelSys.DieselLineValve.Open()
+    simulator.FuelSys.DsStorageOutletValve.Open()
   }
   if (Action.toLowerCase() === CstCmd.Close) {
-    simulator.FuelSys.DieselLineValve.Close()
+    simulator.FuelSys.DsStorageOutletValve.Close()
   }
-  const statusMsg = simulator.FuelSys.DieselLineValve.Status()
+  const statusMsg = simulator.FuelSys.DsStorageOutletValve.Status()
   cb(null, statusMsg)
 }
 
@@ -92,7 +92,7 @@ const server = () => {
   gRpcServer.addService(proto.FuelSys.service, {
     DStankInfo,
     DSshoreFillValve,
-    DSfuelLineValve
+    DsStorageOutletValve
   })
 
   gRpcServer.bind(`${serverIP}:${serverPort}`, grpc.ServerCredentials.createInsecure())

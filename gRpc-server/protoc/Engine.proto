@@ -15,7 +15,8 @@ service Power{
 service FuelSys{
   rpc DStankInfo(EmptyRequest)returns(ContentResponse);
   rpc DSshoreFillValve(ValveRequest) returns(StatusResponse);
-  rpc DSfuelLineValve(ValveRequest) returns(StatusResponse);
+  rpc DsStorageOutletValve(ValveRequest) returns(StatusResponse);
+  rpc DsServiceIntakeValve(ValveRequest) returns(StatusResponse);
 
 }
 

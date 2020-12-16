@@ -16,7 +16,8 @@ const CstActions = {
   Shore: 'shore',
   DSgen1: 'dsgen1',
   DieselTank: 'dieseltank',
-  DieselIntakeValve: 'dieselintakevalve'
+  DieselIntakeValve: 'dieselintakevalve',
+  DieselStorageValve: 'dieselstoragevalve'
 }
 
 const CstCmd = {
@@ -64,7 +65,8 @@ const CstTxt = {
     DsStorageTank: 'Diesel storage tank',
     DsServiceTank: 'Diesel service tank',
     DsShoreFillValve: 'Diesel shore fill valve',
-    DsFuelLineValve: 'Diesel fuel line valve'
+    DsStorageOutletValve: 'Diesel storage outlet valve',
+    DsServiceIntakeValve: 'Diesel service intake valve'
   }
 }
 

@@ -5,12 +5,12 @@ describe('Tank init', () => {
   test('New empty tank', () => {
     const tank = new Tank(250)
     expect(tank.MaxContent).toBe(250)
-    expect(tank.Content).toBe(0)
+    expect(tank.Content()).toBe(0)
   })
   test('New tank with content', () => {
     const tank = new Tank(250, 100)
     expect(tank.MaxContent).toBe(250)
-    expect(tank.Content).toBe(100)
+    expect(tank.Content()).toBe(100)
   })
 })
 
@@ -19,13 +19,13 @@ describe('Tank add 1 step', () => {
     const tank = new Tank(250)
     tank.AddEachStep = 100
     tank.Add()
-    expect(tank.Content).toBe(100)
+    expect(tank.Content()).toBe(100)
   })
   test('Add 1 step to not empty tank', () => {
     const tank = new Tank(250, 200)
     tank.AddEachStep = 20
     tank.Add()
-    expect(tank.Content).toBe(220)
+    expect(tank.Content()).toBe(220)
   })
   test('Try overfill tank', () => {
     let cbFullFlag = false
@@ -34,7 +34,7 @@ describe('Tank add 1 step', () => {
     tank.CbFull = cbFull
     tank.AddEachStep = 40
     tank.Add()
-    expect(tank.Content).toBe(100)
+    expect(tank.Content()).toBe(100)
     expect(cbFullFlag).toBeTruthy()
   })
 })
@@ -44,19 +44,19 @@ describe('Tank remove 1 step', () => {
     const tank = new Tank(200, 150)
     tank.RemoveEachStep = 45
     tank.Remove()
-    expect(tank.Content).toBe(105)
+    expect(tank.Content()).toBe(105)
   })
   test('Remove from empty tank = empty (not negative content)', () => {
     const tank = new Tank(200, 0)
     tank.RemoveEachStep = 45
     tank.Remove()
-    expect(tank.Content).toBe(0)
+    expect(tank.Content()).toBe(0)
   })
   test('Remove from more then content from tank = empty (not negative content)', () => {
     const tank = new Tank(150, 80)
     tank.RemoveEachStep = 100
     tank.Remove()
-    expect(tank.Content).toBe(0)
+    expect(tank.Content()).toBe(0)
   })
 })
 
@@ -73,20 +73,19 @@ describe('Tank add over time', () => {
 
     const cb = () => {
       step += 1
-      // console.debug(`Step ${step}: content = ${tank.Content}`)
+      // console.debug(`Step ${step}: content = ${tank.Content()}`)
 
       const newContent = startContent + step * addEachStep
-      expect(tank.Content).toBe(newContent)
+      expect(tank.Content()).toBe(newContent)
       if (step === amountOfSteps) {
         // console.debug('stop adding')
         tank.StopAdding()
-        expect(tank.Content).toBe(startContent + amountOfSteps * addEachStep)
+        expect(tank.Content()).toBe(startContent + amountOfSteps * addEachStep)
         done()
       }
     }
     tank.StartAdding(cb)
   })
-
   test('Start filling until full', done => {
     jest.setTimeout = 10000
     const startContent = 80
@@ -106,17 +105,17 @@ describe('Tank add over time', () => {
       if (step === amountOfSteps) {
         // console.debug('stop adding test')
         tank.StopAdding()
-        expect(tank.Content).toBe(maxTank)
+        expect(tank.Content()).toBe(maxTank)
         expect(cbFullFlag).toBeTruthy()
         done()
       }
-      // console.debug(`Step ${step}: content = ${tank.Content}`)
+      // console.debug(`Step ${step}: content = ${tank.Content()}`)
       if ((step * addEachStep) > (maxTank - startContent)) {
         // console.debug('Should stop adding because tank is full')
-        expect(tank.Content).toBe(maxTank)
+        expect(tank.Content()).toBe(maxTank)
       } else {
         const newContent = startContent + step * addEachStep
-        expect(tank.Content).toBe(newContent)
+        expect(tank.Content()).toBe(newContent)
       }
     }
     tank.StartAdding(cb)
@@ -139,11 +138,11 @@ describe('Tank remove over time', () => {
       // console.debug(`Step ${step}: content = ${tank.Content}`)
 
       const newContent = startContent - step * removeEachStep
-      expect(tank.Content).toBe(newContent)
+      expect(tank.Content()).toBe(newContent)
       if (step === amountOfSteps) {
         // console.debug('empty tank - stop removing')
         tank.StopAdding()
-        expect(tank.Content).toBe(startContent - amountOfSteps * removeEachStep)
+        expect(tank.Content()).toBe(startContent - amountOfSteps * removeEachStep)
         done()
       }
     }
@@ -164,14 +163,14 @@ describe('Tank remove over time', () => {
       // console.debug(`Step ${step}: content = ${tank.Content}`)
       if (step * removeEachStep < startContent) {
         const newContent = startContent - step * removeEachStep
-        expect(tank.Content).toBe(newContent)
+        expect(tank.Content()).toBe(newContent)
       } else {
-        expect(tank.Content).toBe(0)
+        expect(tank.Content()).toBe(0)
       }
       if (step === amountOfSteps) {
         // console.debug('empty tank - stop removing')
         tank.StopAdding()
-        expect(tank.Content).toBe(0)
+        expect(tank.Content()).toBe(0)
         done()
       }
     }

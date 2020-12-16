@@ -1,7 +1,7 @@
 const { CstChanges } = require('../Cst')
 module.exports = class Tank {
   constructor(Max, StartContent = 0) {
-    this.Content = StartContent
+    this.Inside = StartContent
     this.MaxContent = Max
     this.Adding = null // ref setInterval
     this.AddEachStep = 0
@@ -11,20 +11,24 @@ module.exports = class Tank {
     this.Name = ''
   }
 
+  Content() {
+    return this.Inside
+  }
+
   Add() {
-    if (this.AddEachStep + this.Content < this.MaxContent) {
-      this.Content += this.AddEachStep
+    if (this.AddEachStep + this.Inside < this.MaxContent) {
+      this.Inside += this.AddEachStep
     } else {
       // prevent overfill
-      this.Content = this.MaxContent
+      this.Inside = this.MaxContent
       if (this.CbFull) this.CbFull()
     }
   }
 
   Remove() {
-    if (this.Content - this.RemoveEachStep > 0) {
-      this.Content -= this.RemoveEachStep
-    } else { this.Content = 0 }
+    if (this.Inside - this.RemoveEachStep > 0) {
+      this.Inside -= this.RemoveEachStep
+    } else { this.Inside = 0 }
   }
 
   StartAdding(cbAdded) {
