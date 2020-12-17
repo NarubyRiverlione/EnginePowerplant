@@ -1,14 +1,18 @@
-const { CstChanges } = require('../Cst')
+// const { CstChanges } = require('../Cst')
 module.exports = class Tank {
-  constructor(Max, StartContent = 0) {
+  constructor(Name, Max, StartContent = 0) {
+    this.Name = Name
     this.Inside = StartContent
     this.MaxContent = Max
-    this.Adding = null // ref setInterval
+
+    this.Adding = false
     this.AddEachStep = 0
-    this.Removing = null // ref setIntervel
+    this.Removing = false
     this.RemoveEachStep = 0
-    this.CbFull = null
-    this.Name = ''
+
+    this.cbFull = null
+    this.cbAdded = null
+    this.cbRemoved = null
   }
 
   Content() {
@@ -21,16 +25,24 @@ module.exports = class Tank {
     } else {
       // prevent overfill
       this.Inside = this.MaxContent
-      if (this.CbFull) this.CbFull()
+      if (this.cbFull) this.cbFull()
     }
+    if (this.cbAdded) this.cbAdded()
   }
 
   Remove() {
     if (this.Inside - this.RemoveEachStep > 0) {
       this.Inside -= this.RemoveEachStep
     } else { this.Inside = 0 }
+    if (this.cbRemoved) this.cbRemoved()
   }
 
+  Thick() {
+    if (this.Adding) this.Add()
+    if (this.Removing) this.Remove()
+  }
+
+  /*
   StartAdding(cbAdded) {
     this.Adding = setInterval(() => {
       this.Add()
@@ -58,4 +70,6 @@ module.exports = class Tank {
       this.Removing = null
     }
   }
+}
+*/
 }

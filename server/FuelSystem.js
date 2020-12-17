@@ -4,29 +4,28 @@ const Valve = require('./Components/Valve')
 const { CstFuelSys, CstTxt } = require('./Cst')
 const { FuelSysTxt } = CstTxt
 
-const showTankContent = (tank) => { console.debug(tank.Content()) }
-
 module.exports = class FuelSystem {
   constructor() {
     // #region Diesel storage tank, filled from shore via the intake valve
-    this.DieselTank = new Tank(CstFuelSys.DsStorageTank.TankVolume)
+    this.DieselTank = new Tank(FuelSysTxt.DsStorageTank, CstFuelSys.DsStorageTank.TankVolume)
     this.DieselTank.Name = FuelSysTxt.DsStorage
     this.DieselTank.AddEachStep = CstFuelSys.DsStorageTank.TankAddStep
     // #endregion
 
     // #region Diesel service tank, filled from the storage line via the service intake valve
-    this.DsServiceTank = new Tank(CstFuelSys.DsServiceTank.TankVolume)
+    this.DsServiceTank = new Tank(FuelSysTxt.DsStorageTank, CstFuelSys.DsServiceTank.TankVolume)
     this.DsServiceTank.Name = FuelSysTxt.DsServiceTank
+    this.DsServiceTank.cbFull = () => { this.DieselTank.RemoveEachStep -= CstFuelSys.DsServiceTank.TankAddStep }
     // #endregion
 
     // #region Intake valve from shore to diesel storage tank
     this.DieselShoreFillValve = new Valve({ Content: CstFuelSys.ShoreVolume })
     this.DieselShoreFillValve.Name = FuelSysTxt.DsShoreFillValve
     this.DieselShoreFillValve.cbNowClosed = () => {
-      this.DieselTank.StartAdding() /// (() => showTankContent(this.DieselTank))
+      this.DieselTank.Adding = true
     }
     this.DieselShoreFillValve.cbNowOpen = () => {
-      this.DieselTank.StopAdding() // (() => showTankContent(this.DieselTank))
+      this.DieselTank.Adding = false
     }
     // #endregion
 
@@ -36,12 +35,19 @@ module.exports = class FuelSystem {
     this.DsStorageOutletValve.cbNowClosed = () => {
       // only transfer from storage to service tank
       // if this outlet and service inlet valve are both is closed
-      if (!this.DsServiceIntakeValve.IsOpen) { this.DieselTank.StartRemoving(() => showTankContent(this.DieselTank)) }
+      if (!this.DsServiceIntakeValve.IsOpen) {
+        this.DieselTank.Removing = true
+        this.DsServiceTank.Adding = true
+        this.DieselTank.RemoveEachStep += CstFuelSys.DsServiceTank.TankAddStep
+      }
     }
     // as both outlet valves and service intake valve needs to be open to transfer
     // and this outlet  is now closing --> stop transfer
     this.DsStorageOutletValve.cbNowOpen = () => {
-      this.DieselTank.StopRemoving() // (() => showTankContent(this.DieselTank))
+      this.DieselTank.Removing = false
+      this.DsServiceTank.Adding = false
+      // stop removing form storage may bee other target are also draining the storage
+      this.DieselTank.RemoveEachStep -= CstFuelSys.DsServiceTank.TankAddStep
     }
     // #endregion
 
@@ -51,13 +57,32 @@ module.exports = class FuelSystem {
     this.DsServiceIntakeValve.cbNowClosed = () => {
       // only transfer from storage to service tank
       // if the outlet storage and this service inlet valve are both closed
-      if (!this.DsStorageOutletValve.IsOpen) this.DieselTank.StartRemoving()
+      if (!this.DsStorageOutletValve.IsOpen) {
+        this.DieselTank.Removing = true
+        this.DsServiceTank.Adding = true
+        // add removing from storage, may bee other target are also draining the storage
+        this.DieselTank.RemoveEachStep += CstFuelSys.DsServiceTank.TankAddStep
+      }
     }
     // as both outlet valves and service intake valve needs to be open to transfer
     // and this inlet  is now closing --> stop transfer
     this.DsServiceIntakeValve.cbNowOpen = () => {
-      this.DieselTank.StopRemoving() // (() => showTankContent(this.DieselTank))
+      this.DieselTank.Removing = false
+      this.DsServiceTank.Adding = false
+      // stop removing form storage, may bee other target are also draining the storage
+      this.DieselTank.RemoveEachStep -= CstFuelSys.DsServiceTank.TankAddStep
     }
     // #endregion
+  }
+
+  Thick() {
+    this.DsServiceTank.AddEachStep = (this.DieselTank.Content() === 0)
+      // stop filling service tank if storage is empty
+      ? 0
+      // restart filling service  tank if storage isn't empty
+      : CstFuelSys.DsServiceTank.TankAddStep
+
+    this.DieselTank.Thick()
+    this.DsServiceTank.Thick()
   }
 }
