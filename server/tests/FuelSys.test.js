@@ -125,7 +125,20 @@ describe('diesel service tank', () => {
     expect(fuelSys.DieselTank.Content()).toBe(contentTank)
     expect(fuelSys.DsServiceTank.Content()).toBe(0)
   })
-  test('Open diesel service intake valve + open storage outlet = transfer', () => {
+  test('Close diesel service intake valve then close storage outlet = transfer', () => {
+    const contentTank = 2000
+    fuelSys.DieselTank.Inside = contentTank
+    fuelSys.DsServiceIntakeValve.Close()
+    fuelSys.DsStorageOutletValve.Close()
+
+    fuelSys.Thick()
+    expect(fuelSys.DieselTank.Content()).toBe(contentTank - CstFuelSys.DsServiceTank.TankAddStep)
+    expect(fuelSys.DsServiceTank.Content()).toBe(CstFuelSys.DsServiceTank.TankAddStep)
+    fuelSys.Thick()
+    expect(fuelSys.DieselTank.Content()).toBe(contentTank - CstFuelSys.DsServiceTank.TankAddStep * 2)
+    expect(fuelSys.DsServiceTank.Content()).toBe(CstFuelSys.DsServiceTank.TankAddStep * 2)
+  })
+  test('close storage outlet then close diesel service intake valve +  = transfer', () => {
     const contentTank = 2000
     fuelSys.DieselTank.Inside = contentTank
     fuelSys.DsStorageOutletValve.Close()

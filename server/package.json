@@ -5,7 +5,8 @@
   "main": "",
   "scripts": {
     "lint": "eslint . --fix",
-    "testAll": "jest --coverage=true",
+    "test:coverage": "npm test -- --coverage",
+    "test:badges": "npm run test:coverage  && istanbul-badges-readme",
     "test": "jest"
   },
   "author": "Naruby",
@@ -15,6 +16,7 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.1.3",
+    "istanbul-badges-readme": "^1.2.0",
     "jest": "^26.6.3"
   },
   "dependencies": {
@@ -25,6 +27,11 @@
     "watch": [
       "./*.js",
       "./protoc/Engine.proto"
+    ]
+  },
+  "jest": {
+    "coverageReporters": [
+      "json-summary"
     ]
   },
   "eslintConfig": {
