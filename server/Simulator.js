@@ -1,12 +1,12 @@
 const { CstTxt, CstChanges } = require('./Cst')
-// const Power = require('./Power')
+const Power = require('./Power')
 const FuelSystem = require('./FuelSystem')
 
 const { SimulationTxt } = CstTxt
 module.exports = class Simulator {
   constructor() {
     this.Running = null // ref setIntervall
-    //    this.Power = new Power()
+    this.Power = new Power()
     this.FuelSys = new FuelSystem()
   }
 

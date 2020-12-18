@@ -6,6 +6,8 @@
   "scripts": {
     "server": "cross-env DEBUG=engine:*  nodemon ./server.js",
     "lint": "eslint . --fix",
+    "test:coverage": "npm test -- --coverage",
+    "test:badges": "npm run test:coverage  && istanbul-badges-readme",
     "test": "jest"
   },
   "author": "Naruby",
@@ -15,7 +17,8 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.1.3",
-    "jest": "^26.6.3"
+    "jest": "^26.6.3",
+    "istanbul-badges-readme": "^1.2.0"
   },
   "dependencies": {
     "@grpc/proto-loader": "^0.5.4",
@@ -25,6 +28,12 @@
     "google-protobuf": "^3.0.0",
     "grpc": "^1.11.0",
     "nodemon": "^2.0.3"
+  },
+  "jest": {
+    "coverageReporters": [
+      "json-summary",
+      "text"
+    ]
   },
   "nodemonConfig": {
     "watch": [

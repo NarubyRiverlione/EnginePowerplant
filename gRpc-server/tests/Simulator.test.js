@@ -25,26 +25,29 @@ beforeEach(() => {
 })
 
 describe('Simulator init', () => {
-  test('Init status', async () => {
+  test('Init status', done => {
     grpcSimulator.Status({}, (err, status) => {
       expect(err).toBeNull()
       expect(status).toEqual({ status: false, statusMessage: SimulationTxt.Stopped })
+      done()
     })
   })
 })
 describe('Start/stop simulator', () => {
-  test('Start simulator', () => {
+  test('Start simulator', done => {
     grpcSimulator.Start({}, (err, status) => {
       expect(err).toBeNull()
       expect(status).toEqual({ status: true, statusMessage: SimulationTxt.Started })
+      done()
     })
   })
-  test('Stop simulator', () => {
+  test('Stop simulator', done => {
     grpcSimulator.Start({}, (err, status) => {
       expect(err).toBeNull()
       grpcSimulator.Stop({}, (err2, status2) => {
         expect(err2).toBeNull()
         expect(status2).toEqual({ status: false, statusMessage: SimulationTxt.Stopped })
+        done()
       })
     })
   })
