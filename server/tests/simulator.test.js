@@ -25,4 +25,19 @@ describe('Simulator running tests', () => {
     const { status } = simulator.Status()
     expect(status).toBeFalsy()
   })
+  test('Stop a not running simulator (no crash :)', () => {
+    simulator.Stop()
+    expect(simulator.Running).toBeNull()
+  })
+})
+
+describe('Fuel sys via simulator start', () => {
+  test('Fill diesel storage tank from shore', done => {
+    simulator.Start()
+    simulator.FuelSys.DieselShoreFillValve.Close()
+    setTimeout(() => {
+      expect(simulator.FuelSys.DieselTank.Content()).not.toBe(0)
+      done()
+    }, 1500)
+  })
 })

@@ -1,4 +1,4 @@
-const { CstTxt, CstActions, CstChanges } = require('./Cst')
+const { CstTxt, CstChanges } = require('./Cst')
 // const Power = require('./Power')
 const FuelSystem = require('./FuelSystem')
 
@@ -10,10 +10,13 @@ module.exports = class Simulator {
     this.FuelSys = new FuelSystem()
   }
 
+  Thick() {
+    this.FuelSys.Thick()
+  }
+
   Start() {
     this.Running = setImmediate(() => {
-      console.debug('Thick')
-      this.FuelSys.Thick()
+      this.Thick()
     }, CstChanges.Interval)
     return this.Status()
   }

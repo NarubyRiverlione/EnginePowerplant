@@ -63,17 +63,42 @@ describe('Tank add 1 step', () => {
     expect(tank.Adding).toBeTruthy()
     expect(tank.Removing).toBeFalsy()
   })
+  test('Try overfill tank, without callback ', () => {
+    const start = 240
+    const volume = 250
+    const addEachStep = 50
+    const tank = new Tank('almost full tank', volume, start)
+    tank.AddEachStep = addEachStep
+    tank.Adding = true
+    tank.Thick()
+    expect(tank.Content()).toBe(volume)
+    expect(tank.Adding).toBeTruthy()
+    expect(tank.Removing).toBeFalsy()
+  })
 })
 
 describe('Tank remove 1 step', () => {
   test('Remove from full tank', () => {
+    let flagRemoved = false
     const start = 200
     const removeEachStep = 80
     const tank = new Tank('full tank', start, start)
     tank.RemoveEachStep = removeEachStep
     tank.Removing = true
+    tank.cbRemoved = () => { flagRemoved = true }
     tank.Thick()
     expect(tank.Content()).toBe(start - removeEachStep)
+    expect(tank.Removing).toBeTruthy()
+    expect(tank.Adding).toBeFalsy()
+    expect(flagRemoved).toBeTruthy()
+  })
+  test('Remove from empty tank, without callback', () => {
+    const removeEachStep = 1
+    const tank = new Tank('empty tank', 200)
+    tank.RemoveEachStep = removeEachStep
+    tank.Removing = true
+    tank.Thick()
+    expect(tank.Content()).toBe(0)
     expect(tank.Removing).toBeTruthy()
     expect(tank.Adding).toBeFalsy()
   })

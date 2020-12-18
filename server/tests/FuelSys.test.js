@@ -34,7 +34,7 @@ describe('Fuel system init', () => {
   })
 })
 
-describe('Filling from shore', () => {
+describe('Diesel storage tank: fill from shore', () => {
   test('Closing shore fill valve, adding to diesel tank then open valve', () => {
     fuelSys.DieselShoreFillValve.Close()
     const { status, statusMessage } = fuelSys.DieselShoreFillValve.Status()
@@ -78,7 +78,7 @@ describe('Filling from shore', () => {
   })
 })
 
-describe('Connect dieseltank to storage line', () => {
+describe('Diesel storage tank: outlet valve', () => {
   test('Close diesel storage line valve', () => {
     fuelSys.DieselTank.Inside = 2000
     fuelSys.DsStorageOutletValve.Close()
@@ -98,7 +98,7 @@ describe('Connect dieseltank to storage line', () => {
   })
 })
 
-describe('diesel service tank', () => {
+describe('Diesel service tank', () => {
   test('Close diesel service intake valve + open storage outlet = no transfer', () => {
     const contentTank = 2000
     fuelSys.DieselTank.Inside = contentTank

@@ -84,8 +84,8 @@ const DsServiceIntakeValve = (call, cb) => {
   const statusMsg = simulator.FuelSys.DsServiceIntakeValve.Status()
   cb(null, statusMsg)
 }
-
 // #endregion
+
 /* Starts an RPC server that receives requests
  first argument = server IP
  second argument = server port
