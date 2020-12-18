@@ -23,6 +23,12 @@
     "cross-env": "^7.0.2",
     "debug": "^4.1.1"
   },
+  "jest": {
+    "coverageReporters": [
+      "json-summary",
+      "text"
+    ]
+  },
   "nodemonConfig": {
     "watch": [
       "./*.js",
