@@ -29,11 +29,6 @@
       "./protoc/Engine.proto"
     ]
   },
-  "jest": {
-    "coverageReporters": [
-      "json-summary"
-    ]
-  },
   "eslintConfig": {
     "extends": [
       "airbnb-base/legacy"

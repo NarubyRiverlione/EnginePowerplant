@@ -14,10 +14,12 @@ const CstActions = {
   Status: 'status',
   Reset: 'reset',
   Shore: 'shore',
-  DSgen1: 'dsgen1',
-  DieselTank: 'dieseltank',
-  DieselIntakeValve: 'dieselintakevalve',
-  DieselStorageValve: 'dieselstoragevalve'
+  DsGen1: 'dsgen1',
+  DsStorageTank: 'dsstorgetank',
+  DsServiceTank: 'dsservicetank',
+  DsShoreIntakeValve: 'dsshoreintakevalve',
+  DsStorageOutletValve: 'dsstorageoutletvalve',
+  DsServiceInletValve: 'dsserviceinletvalve'
 }
 
 const CstCmd = {
@@ -75,7 +77,7 @@ const CstBoundaries = {
 }
 
 const CstChanges = {
-  TankInterval: 1000
+  Interval: 1000
 }
 
 const CstFuelSys = {

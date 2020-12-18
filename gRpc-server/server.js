@@ -42,12 +42,16 @@ const StopDSgen1 = (call, cb) => cb(null, simulator.Power.DSgen1.Stop())
 // #endregion
 
 // #region Fuel System
-const DStankInfo = (call, cb) => cb(null, {
-  Content: simulator.FuelSys.DieselTank.Content,
-  MaxContent: CstFuelSys.DsStorageTank.TankVolume
+const DsStorageTankInfo = (call, cb) => cb(null, {
+  Content: simulator.FuelSys.DieselTank.Content(),
+  MaxContent: simulator.FuelSys.DieselTank.MaxContent
+})
+const DsServiceTankInfo = (call, cb) => cb(null, {
+  Content: simulator.FuelSys.DsServiceTank.Content(),
+  MaxContent: simulator.FuelSys.DsServiceTank.MaxContent
 })
 
-const DSshoreFillValve = (call, cb) => {
+const DsShoreFillValve = (call, cb) => {
   const { Action } = call.request
   if (Action.toLowerCase() === CstCmd.Open) {
     simulator.FuelSys.DieselShoreFillValve.Open()
@@ -67,6 +71,17 @@ const DsStorageOutletValve = (call, cb) => {
     simulator.FuelSys.DsStorageOutletValve.Close()
   }
   const statusMsg = simulator.FuelSys.DsStorageOutletValve.Status()
+  cb(null, statusMsg)
+}
+const DsServiceIntakeValve = (call, cb) => {
+  const { Action } = call.request
+  if (Action.toLowerCase() === CstCmd.Open) {
+    simulator.FuelSys.DsServiceIntakeValve.Open()
+  }
+  if (Action.toLowerCase() === CstCmd.Close) {
+    simulator.FuelSys.DsServiceIntakeValve.Close()
+  }
+  const statusMsg = simulator.FuelSys.DsServiceIntakeValve.Status()
   cb(null, statusMsg)
 }
 
@@ -90,9 +105,12 @@ const server = () => {
     StopDSgen1
   })
   gRpcServer.addService(proto.FuelSys.service, {
-    DStankInfo,
-    DSshoreFillValve,
-    DsStorageOutletValve
+    DsStorageTankInfo,
+    DsServiceTankInfo,
+    DsShoreFillValve,
+    DsStorageOutletValve,
+    DsServiceIntakeValve
+
   })
 
   gRpcServer.bind(`${serverIP}:${serverPort}`, grpc.ServerCredentials.createInsecure())

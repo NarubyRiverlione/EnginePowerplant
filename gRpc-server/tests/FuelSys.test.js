@@ -26,47 +26,48 @@ beforeEach(() => {
   grpcFuelSys = new proto.FuelSys(`${CstServerIP}:${CstServerPort}`, grpc.credentials.createInsecure())
 })
 
-describe('Fuel system', () => {
-  test('Init: empty diesel tank', () => {
-    grpcFuelSys.DStankInfo({}, (err, status) => {
+describe('Fuel system: Init', () => {
+  test('Init: all diesel tanks are empty', () => {
+    grpcFuelSys.DsStorageTankInfo({}, (err, status) => {
       expect(err).toBeNull()
       expect(status).toEqual({ Content: 0, MaxContent: CstFuelSys.DsStorageTank.TankVolume })
     })
+    grpcFuelSys.DsServiceTankInfo({}, (err, status) => {
+      expect(err).toBeNull()
+      expect(status).toEqual({ Content: 0, MaxContent: CstFuelSys.DsServiceTank.TankVolume })
+    })
   })
-  test('Init: diesel shore intake valve is open', () => {
-    grpcFuelSys.DSshoreFillValve({ Action: CstCmd.Status }, (err, response) => {
+  test('Init: all diesel valves is open', () => {
+    grpcFuelSys.DsShoreFillValve({ Action: CstCmd.Status }, (err, response) => {
       expect(err).toBeNull()
       expect(response).toEqual({ status: true, statusMessage: `${FuelSysTxt.DsShoreFillValve} is open` })
     })
-  })
-  test('Init: diesel fuel line  valve is open', () => {
-    grpcFuelSys.DSfuelLineValve({ Action: CstCmd.Status }, (err, response) => {
+    grpcFuelSys.DsStorageOutletValve({ Action: CstCmd.Status }, (err, response) => {
       expect(err).toBeNull()
-      expect(response).toEqual({ status: true, statusMessage: `${FuelSysTxt.DsFuelLineValve} is open` })
+      expect(response).toEqual({ status: true, statusMessage: `${FuelSysTxt.DsStorageOutletValve} is open` })
+    })
+    grpcFuelSys.DsServiceIntakeValve({ Action: CstCmd.Status }, (err, response) => {
+      expect(err).toBeNull()
+      expect(response).toEqual({ status: true, statusMessage: `${FuelSysTxt.DsServiceIntakeValve} is open` })
     })
   })
-  test('Diesel fuel line valve: close', () => (
-    grpcFuelSys.DSfuelLineValve({ Action: CstCmd.Close }, (err, response) => {
-      expect(err).toBeNull()
-      expect(response).toEqual({ status: false, statusMessage: `${FuelSysTxt.DsFuelLineValve} is closed` })
-    })
-  ))
-  test.skip('Fill diesel tank from shore', close => {
-    grpcFuelSys = new proto.FuelSys(`${CstServerIP}:${CstServerPort}`, grpc.credentials.createInsecure())
-    grpcFuelSys.DSshoreFillValve({ Action: CstCmd.Close }, (err, response) => {
-      expect(err).toBeNull()
-      const { status } = response
-      expect(status).toBeFalsy()
+})
 
-      setTimeout(() => {
-        grpcFuelSys.DStankInfo({}, (err2, status2) => {
-          expect(err2).toBeNull()
-          const { Content } = status2
-          console.debug(status2)
-          expect(Content).not.toBe(0)
-          close()
-        })
-      }, 3000)
+describe.skip('Fuel system: diesel tanks', () => {
+  test('Close the diesel shore intake valve --> storage tank fills', () => {
+    grpcFuelSys.DsShoreFillValve({ Action: CstCmd.Close }, (err, response) => {
+      expect(err).toBeNull()
+      expect(response).toEqual({ status: false, statusMessage: `${FuelSysTxt.DsShoreFillValve} is closed` })
     })
-  }, 10000)
+
+    // TODO do 1 Thick via Simulator of FuelSysten gRpc ??
+
+    grpcFuelSys.DsStorageTankInfo({}, (err, status) => {
+      expect(err).toBeNull()
+      expect(status).toEqual({
+        Content: CstFuelSys.DsStorageTank.TankAddStep,
+        MaxContent: CstFuelSys.DsStorageTank.TankVolume
+      })
+    })
+  })
 })

@@ -1,33 +1,35 @@
-const { CstTxt } = require('./Cst')
-const Power = require('./Power')
+const { CstTxt, CstActions, CstChanges } = require('./Cst')
+// const Power = require('./Power')
 const FuelSystem = require('./FuelSystem')
 
 const { SimulationTxt } = CstTxt
 module.exports = class Simulator {
   constructor() {
-    this.IsRunning = false
-    this.Power = new Power()
+    this.Running = null // ref setIntervall
+    //    this.Power = new Power()
     this.FuelSys = new FuelSystem()
   }
 
-  Update() {
-    console.debug('Thick')
-  }
-
   Start() {
-    this.IsRunning = true
+    this.Running = setImmediate(() => {
+      console.debug('Thick')
+      this.FuelSys.Thick()
+    }, CstChanges.Interval)
     return this.Status()
   }
 
   Stop() {
-    this.IsRunning = false
+    if (this.Running) {
+      clearImmediate(this.Running)
+      this.Running = null
+    }
     return this.Status()
   }
 
   Status() {
     return {
-      status: this.IsRunning,
-      statusMessage: this.IsRunning ? SimulationTxt.Started : SimulationTxt.Stopped
+      status: !!this.Running,
+      statusMessage: this.Running ? SimulationTxt.Started : SimulationTxt.Stopped
     }
   }
 }
